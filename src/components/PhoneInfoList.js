@@ -8,11 +8,22 @@ class PhoneInfoList extends Component {
       onRemove: () => console.warn('onRemove not defined'),
       onUpdate: () => console.warn('onUpdate not defined'),
     }
-
-  //배열을 렌더링 하게 될 때에는 꼭 고유값을 key 로 사용해야 한다는 것 입니다. 
+  //배열을 렌더링 하게 될 때에는 꼭 고유값을 key 로 사용해야함. 
   // 그리고, 불변성 유지를 위하여 데이터를 조작 할 때에는 기존의 배열을 건들이지 않는 방식으로 해야 함.
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.data !== this.props.data; // 다음 받아올 data가 다른 배열일때 true 반환
+    // 불변성을 지켜준 것!
+  }
+  /* 
+  App이 리렌더링됨에 따라 PhoneInfoList도 리렌더링이 된다.
+  실제 변화가 일어나지 않아 지금은 Virtual DOM에만 리렌더링 하지만 이게 몇백, 몇천개가 될 경우를
+  대비하여 자원낭비를 막기 위해서 shouldComponentUpdate LifeCycle 을 사용해준다.
+   */
+
   render() {
+
+    console.log('render PhoneInfoList');
     const { data, onRemove, onUpdate } = this.props;
     const list = data.map(
       info => (
